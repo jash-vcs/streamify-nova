@@ -1,7 +1,7 @@
 
 import { Episode, MovieDetails, MovieResponse, Season } from "@/types/types";
 
-const API_KEY = "3e12d92ee7d2e655071a5e5b30579d83"; // Free TMDB API key for demo purposes
+const API_KEY = "12eb05fc4d174f5a9eb084c97e81d0a6"; // Free TMDB API key for demo purposes
 const BASE_URL = "https://api.themoviedb.org/3";
 const LANGUAGE = "en-US";
 
