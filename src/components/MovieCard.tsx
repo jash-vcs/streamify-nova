@@ -41,7 +41,7 @@ const MovieCard = ({ movie, isLarge = false }: MovieCardProps) => {
 
   return (
     <div
-      className={`netflix-card cursor-pointer ${isLarge ? "w-full aspect-[2/3]" : "w-full aspect-video"}`}
+      className={`netflix-card group cursor-pointer ${isLarge ? "w-full aspect-[2/3]" : "w-full aspect-video"}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleCardClick}
@@ -50,8 +50,8 @@ const MovieCard = ({ movie, isLarge = false }: MovieCardProps) => {
         <img
           src={getImageUrl(imagePath, isLarge ? "w500" : "w780")}
           alt={title}
-          className={`w-full h-full object-cover transition-all duration-300 ease-in-out ${
-            isHovered ? "scale-110 brightness-75" : ""
+          className={`w-full h-full object-cover  ${
+            isHovered ? "scale-105 brightness-75 transition-all duration-300 ease-in-out" : ""
           } blur-up ${imageLoaded ? "loaded" : ""}`}
           onLoad={handleImageLoad}
           loading="lazy"

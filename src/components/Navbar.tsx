@@ -3,9 +3,11 @@ import { Search, Bell, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobile,setIsMobile] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const navigate = useNavigate();
 
@@ -13,6 +15,9 @@ const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
+    if(window.screen.width <800){
+      setIsMobile(true)
+    }
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -29,12 +34,12 @@ const Navbar = () => {
       }`}
     >
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-6">
+        <div className={cn("flex items-center space-x-6",isMobile && showSearch ? "hidden" :"")}>
           <Link to="/" className="flex items-center">
             <p className="font-black text-red-500 text-lg">NETFLIX</p>
           </Link>
-          <div className="hidden md:flex space-x-4">
-            <Link to="/" className="text-sm text-white hover:text-gray-300 transition">Home</Link>
+          <div className="flex space-x-4">
+            {/* <Link to="/" className="text-sm text-white hover:text-gray-300 transition">Home</Link> */}
             <Link to="/tv-shows" className="text-sm text-white hover:text-gray-300 transition">TV Shows</Link>
             <Link to="/movies" className="text-sm text-white hover:text-gray-300 transition">Movies</Link>
             {/* <Link to="/latest" className="text-sm text-white hover:text-gray-300 transition">New & Popular</Link>

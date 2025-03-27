@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Info, Play, Volume2, VolumeX } from "lucide-react";
@@ -25,7 +24,6 @@ const Hero = ({ movies }: HeroProps) => {
 
   useEffect(() => {
     if (movies.length > 0) {
-      // Set initial banner
       const randomIndex = Math.floor(Math.random() * movies.length);
       setBanner(movies[randomIndex]);
       setCurrent(randomIndex);
@@ -33,9 +31,9 @@ const Hero = ({ movies }: HeroProps) => {
   }, [movies]);
 
   useEffect(() => {
-    if (!api) {
-      return;
-    }
+    if (!api) return;
+
+    api.scrollTo(current, true); // Ensures first slide is selected
 
     api.on("select", () => {
       const selectedIndex = api.selectedScrollSnap();
@@ -44,25 +42,22 @@ const Hero = ({ movies }: HeroProps) => {
         setBanner(movies[selectedIndex]);
       }
     });
-  }, [api, movies]);
+  }, [api, movies, current]);
 
   useEffect(() => {
-    // Reset video timer when banner changes
     if (videoTimeoutRef.current) {
       window.clearTimeout(videoTimeoutRef.current);
     }
-    
+
     setShowVideo(false);
-    
+
     if (banner) {
-      // Fetch movie details to get video info
       const fetchDetails = async () => {
         try {
           const mediaType = banner.media_type || (banner.first_air_date ? "tv" : "movie");
           const details = await fetchMovieDetails(banner.id.toString(), mediaType);
           setBannerDetails(details);
-          
-          // Set timer to show video after 5 seconds
+
           if (details.videos?.results?.length > 0) {
             videoTimeoutRef.current = window.setTimeout(() => {
               setShowVideo(true);
@@ -72,15 +67,26 @@ const Hero = ({ movies }: HeroProps) => {
           console.error("Error fetching banner details:", error);
         }
       };
-      
+
       fetchDetails();
     }
-    
+
     return () => {
       if (videoTimeoutRef.current) {
         window.clearTimeout(videoTimeoutRef.current);
       }
     };
+  }, [banner]);
+
+  const preloadImage = (src: string) => {
+    const img = new Image();
+    img.src = src;
+  };
+
+  useEffect(() => {
+    if (banner && banner.backdrop_path) {
+      preloadImage(getImageUrl(banner.backdrop_path));
+    }
   }, [banner]);
 
   if (!banner) return null;
@@ -97,7 +103,7 @@ const Hero = ({ movies }: HeroProps) => {
   const handleMoreInfo = () => {
     const mediaType = banner.media_type || (banner.first_air_date ? "tv" : "movie");
     const currentPath = window.location.pathname;
-    
+
     if (currentPath.includes('tv-shows')) {
       navigate(`/tv-shows/details/${mediaType}/${banner.id}`);
     } else if (currentPath.includes('movies')) {
@@ -111,22 +117,25 @@ const Hero = ({ movies }: HeroProps) => {
     setMuted(!muted);
   };
 
-  // Find a YouTube video if available
   const trailer = bannerDetails?.videos?.results?.find(
     (video) => video.type === "Trailer" || video.type === "Teaser"
   );
 
   return (
-    <Carousel 
-      className="relative h-[70vh] md:h-[80vh] lg:h-[90vh] w-full overflow-hidden" 
-      setApi={setApi}
-    >
+    <Carousel className="relative h-[70vh] md:h-[80vh] lg:h-[90vh] w-full overflow-hidden" setApi={setApi}>
       <CarouselContent>
         {movies.map((movie, index) => (
           <CarouselItem key={movie.id} className="pl-0">
-            <div className={`hero relative h-[70vh] md:h-[80vh] lg:h-[90vh] w-full overflow-hidden ${
-              banner.id === movie.id ? "opacity-100" : "opacity-0"
-            }`}>
+            <div
+              className={`hero relative h-[70vh] md:h-[80vh] lg:h-[90vh] w-full overflow-hidden ${
+                banner.id === movie.id ? "opacity-100" : "opacity-0"
+              }`}
+              style={{
+                backgroundImage: `url(${banner ? getImageUrl(banner.backdrop_path) : 'path/to/placeholder.jpg'})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
               <div className="absolute inset-0 w-full h-full">
                 {showVideo && trailer && banner.id === movie.id ? (
                   <>
@@ -140,7 +149,7 @@ const Hero = ({ movies }: HeroProps) => {
                         className="w-full h-full object-cover scale-[1.5]"
                       ></iframe>
                     </div>
-                    <button 
+                    <button
                       onClick={toggleMute}
                       className="absolute bottom-32 right-6 z-20 bg-black/50 p-2 rounded-full"
                     >
@@ -160,28 +169,22 @@ const Hero = ({ movies }: HeroProps) => {
               </div>
 
               {banner.id === movie.id && (
-                <div className="absolute bottom-0 left-0 p-6 md:p-16 w-full md:w-2/3 lg:w-1/2 z-10 space-y-4">
+                <div className="absolute bottom-0 left-0 p-6 md:p-16 w-full md:w-2/3 lg:w-1/2 z-10 space-y-4 max-md:px-8">
                   <h1 className="font-bold text-3xl md:text-5xl lg:text-6xl text-white animate-slide-up">
                     {movie.title || movie.name}
                   </h1>
-                  
+
                   <div className="flex space-x-4 animate-slide-up" style={{ animationDelay: "0.1s" }}>
-                    <button
-                      onClick={handlePlay}
-                      className="netflix-button-primary flex items-center space-x-2 px-8"
-                    >
+                    <button onClick={handlePlay} className="netflix-button-primary flex items-center space-x-2 px-8">
                       <Play size={18} />
                       <span>Play</span>
                     </button>
-                    <button
-                      onClick={handleMoreInfo}
-                      className="netflix-button-secondary flex items-center space-x-2"
-                    >
+                    <button onClick={handleMoreInfo} className="netflix-button-secondary flex items-center space-x-2">
                       <Info size={18} />
                       <span>More Info</span>
                     </button>
                   </div>
-                  
+
                   <p className="text-white text-sm md:text-base max-w-xl animate-slide-up" style={{ animationDelay: "0.2s" }}>
                     {truncate(movie.overview, 200)}
                   </p>

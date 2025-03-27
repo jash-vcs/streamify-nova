@@ -81,7 +81,7 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
           skipSnaps: false,
           containScroll: "trimSnaps",
         }}
-        className="w-full"
+        className="w-full max-md:px-8"
       >
         <CarouselContent className="pl-6">
           {movies.map((movie) => (
@@ -91,7 +91,7 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
                 isLarge 
                   ? 'basis-[160px] md:basis-[200px]' 
                   : 'basis-[240px] md:basis-[280px]'
-              } transition-all duration-300`}
+              } transition-all duration-300 overflow-visible`}
             >
               <MovieCard 
                 movie={movie} 

@@ -53,7 +53,7 @@
   }
   
   .netflix-card:hover {
-    @apply transform scale-105 shadow-xl z-10;
+    @apply shadow-xl z-10;
   }
 
   .netflix-container {
