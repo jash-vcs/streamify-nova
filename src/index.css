@@ -126,3 +126,12 @@
 .nav-background-scroll {
   @apply bg-netflix-black shadow-md;
 }
+
+.hide-scrollbar {
+  overflow: scroll; /* Allows scrolling */
+  scrollbar-width: none; /* For Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* For Webkit browsers (Chrome, Safari) */
+}

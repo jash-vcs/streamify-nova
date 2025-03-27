@@ -57,7 +57,7 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
     return (
       <div className="row-container space-y-4 my-6 md:my-8">
         <h2 className="netflix-section-title pl-6">{title}</h2>
-        <div className="flex space-x-4 pl-6 overflow-x-hidden">
+        <div className="flex space-x-4 pl-6 overflow-x-hidden hide-scrollbar">
           {[...Array(8)].map((_, i) => (
             <div 
               key={i} 
@@ -90,7 +90,7 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
         
         <div 
           ref={rowRef}
-          className="flex space-x-2 pl-6 pr-6 overflow-x-scroll scrollbar-none transition-all duration-500 opacity-80 group-hover:opacity-100"
+          className="flex space-x-2 pl-6 pr-6 overflow-x-scroll hide-scrollbar scrollbar-none transition-all duration-500 opacity-80 group-hover:opacity-100"
         >
           {movies.map((movie) => (
             <MovieCard 

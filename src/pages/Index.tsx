@@ -40,7 +40,7 @@ const Index = () => {
       {!loading && featuredMovies.length > 0 && <Hero movies={featuredMovies} />}
       
       <div className="pb-20">
-        {categories.map((category) => (
+        {categories.slice(1,categories.length-1).map((category) => (
           <MovieRow
             key={category.id}
             title={category.title}
