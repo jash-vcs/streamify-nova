@@ -90,7 +90,7 @@ const MovieCard = ({ movie, isLarge = false }: MovieCardProps) => {
             <div className="flex items-center space-x-2 text-xs text-gray-300">
               <span>{(movie.release_date || movie.first_air_date || "").substring(0, 4) || "N/A"}</span>
               {mediaType === "tv" && <span className="px-1 py-0.5 bg-netflix-red/90 rounded text-white">Series</span>}
-              {mediaType === "movie" && <span className="flex items-center"><Clock size={12} className="mr-1" />{movie.runtime || 90}m</span>}
+              {mediaType === "movie" && <span className="flex items-center"><Clock size={12} className="mr-1" />90m</span>}
             </div>
           </div>
         </div>
