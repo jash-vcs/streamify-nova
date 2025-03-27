@@ -1,4 +1,3 @@
-
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -23,6 +22,7 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
   const [selectedServer, setSelectedServer] = useState(0);
   const [showControls, setShowControls] = useState(true);
   const [controlsTimer, setControlsTimer] = useState<NodeJS.Timeout | null>(null);
+  
 
   // Get the embed URL from the selected server
   const getEmbedUrl = () => {
@@ -33,12 +33,10 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
   const handleMouseMove = () => {
     setShowControls(true);
     
-    // Clear existing timer if there is one
     if (controlsTimer) {
       clearTimeout(controlsTimer);
     }
     
-    // Set a new timer to hide controls after 3 seconds of inactivity
     const timer = setTimeout(() => {
       setShowControls(false);
     }, 3000);
@@ -46,19 +44,22 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
     setControlsTimer(timer);
   };
 
-  // Set up and clean up the event listener
+  // Set up orientation and controls
   useEffect(() => {
-    // Initial timer to hide controls after 3 seconds
     const initialTimer = setTimeout(() => {
       setShowControls(false);
     }, 3000);
     
     setControlsTimer(initialTimer);
     
-    // Clean up timer on component unmount
     return () => {
       if (controlsTimer) {
         clearTimeout(controlsTimer);
+      }
+
+      // Attempt to unlock orientation when component unmounts
+      if (typeof screen.orientation !== 'undefined' && screen.orientation.unlock) {
+        screen.orientation.unlock();
       }
     };
   }, []);
@@ -99,12 +100,13 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
             </SelectContent>
           </Select>
         </div>
+        <div className="max-md:hidden"/>
       </div>
 
       <div className="absolute inset-0 w-full h-full flex items-center justify-center">
         <iframe
           src={getEmbedUrl()}
-          className="w-full h-full md:w-[90%] md:h-[90%] border-0"
+          className="w-full h-full md:w-full md:h-full border-0"
           allowFullScreen
           loading="eager"
           title="Video Player"
