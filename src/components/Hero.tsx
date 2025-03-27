@@ -6,6 +6,7 @@ import { Movie, MovieDetails } from "@/types/types";
 import { getImageUrl, fetchMovieDetails } from "@/services/tmdb";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import type { CarouselApi } from "@/components/ui/carousel";
 
 interface HeroProps {
   movies: Movie[];
@@ -19,14 +20,31 @@ const Hero = ({ movies }: HeroProps) => {
   const navigate = useNavigate();
   const videoTimeoutRef = useRef<number | null>(null);
   const isMobile = useIsMobile();
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     if (movies.length > 0) {
       // Set initial banner
       const randomIndex = Math.floor(Math.random() * movies.length);
       setBanner(movies[randomIndex]);
+      setCurrent(randomIndex);
     }
   }, [movies]);
+
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    api.on("select", () => {
+      const selectedIndex = api.selectedScrollSnap();
+      setCurrent(selectedIndex);
+      if (movies[selectedIndex]) {
+        setBanner(movies[selectedIndex]);
+      }
+    });
+  }, [api, movies]);
 
   useEffect(() => {
     // Reset video timer when banner changes
@@ -65,12 +83,6 @@ const Hero = ({ movies }: HeroProps) => {
     };
   }, [banner]);
 
-  const handleCarouselChange = (index: number) => {
-    if (movies[index]) {
-      setBanner(movies[index]);
-    }
-  };
-
   if (!banner) return null;
 
   const truncate = (string: string, n: number) => {
@@ -105,7 +117,10 @@ const Hero = ({ movies }: HeroProps) => {
   );
 
   return (
-    <Carousel className="relative h-[70vh] md:h-[80vh] lg:h-[90vh] w-full overflow-hidden" onValueChange={handleCarouselChange}>
+    <Carousel 
+      className="relative h-[70vh] md:h-[80vh] lg:h-[90vh] w-full overflow-hidden" 
+      setApi={setApi}
+    >
       <CarouselContent>
         {movies.map((movie, index) => (
           <CarouselItem key={movie.id} className="pl-0">
