@@ -1,9 +1,10 @@
 
-import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import { fetchFromAPI } from "@/services/tmdb";
 import { Movie, MovieResponse } from "@/types/types";
 import MovieCard from "./MovieCard";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MovieRowProps {
   title: string;
@@ -15,8 +16,7 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [scrollX, setScrollX] = useState(0);
-  const rowRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -35,23 +35,6 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
 
     fetchMovies();
   }, [path]);
-
-  const handleScroll = (direction: "left" | "right") => {
-    if (!rowRef.current) return;
-
-    const { scrollWidth, clientWidth } = rowRef.current;
-    const scrollAmount = clientWidth * 0.8;
-    
-    if (direction === "left") {
-      const newScrollX = Math.max(scrollX - scrollAmount, 0);
-      setScrollX(newScrollX);
-      rowRef.current.scrollTo({ left: newScrollX, behavior: "smooth" });
-    } else {
-      const newScrollX = Math.min(scrollX + scrollAmount, scrollWidth - clientWidth);
-      setScrollX(newScrollX);
-      rowRef.current.scrollTo({ left: newScrollX, behavior: "smooth" });
-    }
-  };
 
   if (loading) {
     return (
@@ -79,36 +62,36 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
     <div className="row-container space-y-2 my-6 md:my-8 group">
       <h2 className="netflix-section-title pl-6 opacity-90 group-hover:opacity-100 transition-opacity">{title}</h2>
       
-      <div className="relative">
-        <button
-          onClick={() => handleScroll("left")}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 w-12 h-full bg-black/30 hover:bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-          aria-label="Scroll left"
-        >
-          <ChevronLeft size={32} className="text-white" />
-        </button>
-        
-        <div 
-          ref={rowRef}
-          className="flex space-x-2 pl-6 pr-6 overflow-x-scroll hide-scrollbar scrollbar-none transition-all duration-500 opacity-80 group-hover:opacity-100"
-        >
+      <Carousel
+        opts={{
+          align: "start",
+          loop: false,
+          skipSnaps: false,
+          containScroll: "trimSnaps",
+        }}
+        className="w-full"
+      >
+        <CarouselContent className="pl-6">
           {movies.map((movie) => (
-            <MovieCard 
+            <CarouselItem 
               key={movie.id} 
-              movie={movie} 
-              isLarge={isLarge} 
-            />
+              className={`${isLarge ? 'basis-[250px] md:basis-[300px]' : 'basis-[200px] md:basis-[250px]'} transition-all duration-300`}
+            >
+              <MovieCard 
+                movie={movie} 
+                isLarge={isLarge} 
+              />
+            </CarouselItem>
           ))}
-        </div>
+        </CarouselContent>
         
-        <button
-          onClick={() => handleScroll("right")}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 w-12 h-full bg-black/30 hover:bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-          aria-label="Scroll right"
-        >
-          <ChevronRight size={32} className="text-white" />
-        </button>
-      </div>
+        {!isMobile && (
+          <>
+            <CarouselPrevious className="hidden md:flex left-1 h-20 w-10 rounded-r-md bg-black/30 hover:bg-black/50" />
+            <CarouselNext className="hidden md:flex right-1 h-20 w-10 rounded-l-md bg-black/30 hover:bg-black/50" />
+          </>
+        )}
+      </Carousel>
     </div>
   );
 };
