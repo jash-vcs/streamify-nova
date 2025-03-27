@@ -37,8 +37,8 @@ const Navbar = () => {
             <Link to="/" className="text-sm text-white hover:text-gray-300 transition">Home</Link>
             <Link to="/tv-shows" className="text-sm text-white hover:text-gray-300 transition">TV Shows</Link>
             <Link to="/movies" className="text-sm text-white hover:text-gray-300 transition">Movies</Link>
-            <Link to="/latest" className="text-sm text-white hover:text-gray-300 transition">New & Popular</Link>
-            <Link to="/my-list" className="text-sm text-white hover:text-gray-300 transition">My List</Link>
+            {/* <Link to="/latest" className="text-sm text-white hover:text-gray-300 transition">New & Popular</Link>
+            <Link to="/my-list" className="text-sm text-white hover:text-gray-300 transition">My List</Link> */}
           </div>
         </div>
 
