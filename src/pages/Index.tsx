@@ -1,15 +1,30 @@
 
 import { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Movie, MovieResponse } from "@/types/types";
 import { categories, fetchFromAPI } from "@/services/tmdb";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import MovieRow from "@/components/MovieRow";
+import DetailsSheet from "@/components/DetailsSheet";
 import { toast } from "sonner";
 
 const Index = () => {
+  const { mediaType, id } = useParams<{ mediaType: string; id: string }>();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [featuredMovies, setFeaturedMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+
+  useEffect(() => {
+    // Check if we have mediaType and id parameters
+    if (mediaType && id) {
+      setDetailsOpen(true);
+    } else {
+      setDetailsOpen(false);
+    }
+  }, [mediaType, id]);
 
   useEffect(() => {
     const fetchFeaturedContent = async () => {
@@ -33,6 +48,12 @@ const Index = () => {
     fetchFeaturedContent();
   }, []);
 
+  const handleDetailsClose = () => {
+    setDetailsOpen(false);
+    // Update the URL without the mediaType and id parameters
+    navigate("/", { replace: true });
+  };
+
   return (
     <div className="min-h-screen bg-netflix-black text-white">
       <Navbar />
@@ -49,6 +70,15 @@ const Index = () => {
           />
         ))}
       </div>
+
+      <DetailsSheet 
+        mediaType={mediaType} 
+        id={id} 
+        isOpen={detailsOpen} 
+        onOpenChange={(open) => {
+          if (!open) handleDetailsClose();
+        }} 
+      />
     </div>
   );
 };
