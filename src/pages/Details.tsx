@@ -5,7 +5,7 @@ import { MovieDetails, Season, Episode } from "@/types/types";
 import { fetchMovieDetails, fetchSeasonDetails, getImageUrl } from "@/services/tmdb";
 import Navbar from "@/components/Navbar";
 import MovieRow from "@/components/MovieRow";
-import { Play, Plus, ChevronDown, Star, Clock, Calendar, Film, Tv, Award } from "lucide-react";
+import { Play, Plus, ChevronDown, Star, Clock, Calendar, Film, Tv, Award, User } from "lucide-react";
 import { toast } from "sonner";
 
 const Details = () => {
