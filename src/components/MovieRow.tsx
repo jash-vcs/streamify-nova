@@ -5,6 +5,7 @@ import { Movie, MovieResponse } from "@/types/types";
 import MovieCard from "./MovieCard";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { toast } from "sonner";
 
 interface MovieRowProps {
   title: string;
@@ -23,18 +24,29 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
       try {
         setLoading(true);
         const data = await fetchFromAPI<MovieResponse>(path);
-        setMovies(data.results);
+        if (data.results.length > 0) {
+          // Filter out items without images
+          const filteredResults = data.results.filter(
+            (movie) => isLarge ? movie.poster_path !== null : movie.backdrop_path !== null
+          );
+          setMovies(filteredResults);
+        } else {
+          setMovies([]);
+          setError(true);
+          toast.error("No content found for this category");
+        }
         setError(false);
       } catch (err) {
         console.error("Error fetching row data:", err);
         setError(true);
+        toast.error("Failed to load content");
       } finally {
         setLoading(false);
       }
     };
 
     fetchMovies();
-  }, [path]);
+  }, [path, isLarge]);
 
   if (loading) {
     return (
@@ -44,8 +56,8 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
           {[...Array(8)].map((_, i) => (
             <div 
               key={i} 
-              className={`flex-shrink-0 bg-gray-800 rounded-md animate-pulse-slow ${
-                isLarge ? "h-80 w-52 md:h-96 md:w-64" : "h-40 w-72 md:h-44"
+              className={`flex-shrink-0 bg-gray-800 rounded-md animate-pulse ${
+                isLarge ? "h-64 w-44 md:h-80 md:w-52" : "h-36 w-64 md:h-40 md:w-72"
               }`}
             ></div>
           ))}
@@ -65,7 +77,7 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
       <Carousel
         opts={{
           align: "start",
-          loop: false,
+          loop: true,
           skipSnaps: false,
           containScroll: "trimSnaps",
         }}
@@ -75,7 +87,11 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
           {movies.map((movie) => (
             <CarouselItem 
               key={movie.id} 
-              className={`${isLarge ? 'basis-[250px] md:basis-[300px]' : 'basis-[200px] md:basis-[250px]'} transition-all duration-300`}
+              className={`${
+                isLarge 
+                  ? 'basis-[160px] md:basis-[200px]' 
+                  : 'basis-[240px] md:basis-[280px]'
+              } transition-all duration-300`}
             >
               <MovieCard 
                 movie={movie} 

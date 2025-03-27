@@ -26,14 +26,14 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/details/:mediaType/:id" element={<Index />} />
+              <Route path="/details/:mediaType/:id" element={<Details />} />
               <Route path="/watch/:mediaType/:id" element={<Watch />} />
               <Route path="/watch/:mediaType/:id/:seasonNumber/:episodeNumber" element={<Watch />} />
               <Route path="/search" element={<Search />} />
               <Route path="/tv-shows" element={<TvShows />} />
-              <Route path="/tv-shows/details/:mediaType/:id" element={<TvShows />} />
+              <Route path="/tv-shows/details/:mediaType/:id" element={<Details />} />
               <Route path="/movies" element={<Movies />} />
-              <Route path="/movies/details/:mediaType/:id" element={<Movies />} />
+              <Route path="/movies/details/:mediaType/:id" element={<Details />} />
               <Route path="/latest" element={<Index />} />
               <Route path="/my-list" element={<Index />} />
               <Route path="*" element={<NotFound />} />

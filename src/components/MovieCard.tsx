@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Info, Play, Star, Clock } from "lucide-react";
 import { Movie } from "@/types/types";
@@ -17,6 +17,9 @@ const MovieCard = ({ movie, isLarge = false }: MovieCardProps) => {
 
   const mediaType = movie.media_type || (movie.first_air_date ? "tv" : "movie");
   const title = movie.title || movie.name || "";
+  const imagePath = isLarge ? movie.poster_path : movie.backdrop_path;
+  
+  if (!imagePath) return null;
   
   const handleImageLoad = () => {
     setImageLoaded(true);
@@ -38,14 +41,14 @@ const MovieCard = ({ movie, isLarge = false }: MovieCardProps) => {
 
   return (
     <div
-      className={`netflix-card flex-shrink-0 relative ${isLarge ? "w-52 md:w-64" : "w-72"}`}
+      className={`netflix-card cursor-pointer ${isLarge ? "w-full aspect-[2/3]" : "w-full aspect-video"}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleCardClick}
     >
-      <div className={`overflow-hidden rounded-md bg-gray-800 ${isLarge ? "h-80 md:h-96" : "h-40 md:h-44"}`}>
+      <div className="overflow-hidden rounded-md bg-gray-800 w-full h-full">
         <img
-          src={getImageUrl(isLarge ? movie.poster_path : movie.backdrop_path, isLarge ? "w500" : "w780")}
+          src={getImageUrl(imagePath, isLarge ? "w500" : "w780")}
           alt={title}
           className={`w-full h-full object-cover transition-all duration-300 ease-in-out ${
             isHovered ? "scale-110 brightness-75" : ""
@@ -56,7 +59,7 @@ const MovieCard = ({ movie, isLarge = false }: MovieCardProps) => {
       </div>
 
       {isHovered && (
-        <div className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/90 via-black/60 to-transparent rounded-md animate-fade-in">
+        <div className="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/90 via-black/60 to-transparent rounded-md animate-fade-in">
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <div className="flex space-x-2">
@@ -78,16 +81,16 @@ const MovieCard = ({ movie, isLarge = false }: MovieCardProps) => {
               
               <div className="flex items-center space-x-1 text-xs">
                 <Star size={14} className="text-yellow-400" />
-                <span>{movie.vote_average.toFixed(1)}</span>
+                <span>{movie.vote_average?.toFixed(1) || "N/A"}</span>
               </div>
             </div>
             
             <h3 className="text-sm font-medium truncate">{title}</h3>
             
             <div className="flex items-center space-x-2 text-xs text-gray-300">
-              <span>{(movie.release_date || movie.first_air_date || "").substring(0, 4)}</span>
+              <span>{(movie.release_date || movie.first_air_date || "").substring(0, 4) || "N/A"}</span>
               {mediaType === "tv" && <span className="px-1 py-0.5 bg-netflix-red/90 rounded text-white">Series</span>}
-              {mediaType === "movie" && <span className="flex items-center"><Clock size={12} className="mr-1" />90m</span>}
+              {mediaType === "movie" && <span className="flex items-center"><Clock size={12} className="mr-1" />{movie.runtime || 90}m</span>}
             </div>
           </div>
         </div>
