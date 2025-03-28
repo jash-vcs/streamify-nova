@@ -12,7 +12,11 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { addToContinueWatching } from "@/utils/localStorageUtils";
+import { 
+  addToContinueWatching, 
+  getLastWatched, 
+  updateContinueWatchingServer 
+} from "@/utils/localStorageUtils";
 
 interface PlayerProps {
   mediaType: string;
@@ -32,6 +36,14 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
   const currentSeason = seasonNumber ? parseInt(seasonNumber) : 1;
   const currentEpisode = episodeNumber ? parseInt(episodeNumber) : 1;
 
+  useEffect(() => {
+    // Check if this media is in continue watching and load the last used server
+    const lastWatched = getLastWatched(parseInt(id), mediaType);
+    if (lastWatched && lastWatched.serverId !== undefined) {
+      setSelectedServer(lastWatched.serverId);
+    }
+  }, [id, mediaType]);
+
   // Get the embed URL from the selected server
   const getEmbedUrl = () => {
     return servers[selectedServer].getter(mediaType, id, seasonNumber, episodeNumber);
@@ -50,6 +62,16 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
     }, 3000);
     
     setControlsTimer(timer);
+  };
+
+  // Handle server change
+  const handleServerChange = (value: string) => {
+    const serverId = parseInt(value);
+    setSelectedServer(serverId);
+    
+    // Update in continue watching
+    updateContinueWatchingServer(parseInt(id), mediaType, serverId);
+    toast.success(`Switched to ${servers[serverId].name}`);
   };
 
   // Handle navigation to previous episode
@@ -100,7 +122,8 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
           mediaType,
           0,
           mediaType === 'tv' ? currentSeason : undefined,
-          mediaType === 'tv' ? currentEpisode : undefined
+          mediaType === 'tv' ? currentEpisode : undefined,
+          selectedServer
         );
       } catch (error) {
         console.error("Failed to add to continue watching:", error);
@@ -108,7 +131,7 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
     };
     
     fetchMovieDetails();
-  }, [id, mediaType, seasonNumber, episodeNumber]);
+  }, [id, mediaType, seasonNumber, episodeNumber, selectedServer]);
 
   // Set up orientation and controls
   useEffect(() => {
@@ -148,7 +171,7 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
         <div className="w-48">
           <Select
             value={selectedServer.toString()}
-            onValueChange={(value) => setSelectedServer(parseInt(value))}
+            onValueChange={handleServerChange}
           >
             <SelectTrigger className="bg-black/40 text-white border-none hover:bg-black/60">
               <SelectValue placeholder={servers[selectedServer].name} />

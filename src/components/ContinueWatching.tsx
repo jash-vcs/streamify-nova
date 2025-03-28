@@ -43,8 +43,8 @@ const ContinueWatching = () => {
           >
             <div className="relative aspect-[2/3] overflow-hidden rounded-md transition-transform duration-300 group-hover:scale-105">
               <img
-                src={`https://image.tmdb.org/t/p/w500${item.posterPath}`}
-                alt={item.title}
+                src={item.posterPath ? `https://image.tmdb.org/t/p/w500${item.posterPath}` : "/placeholder.svg"}
+                alt={item.title || "Movie poster"}
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "/placeholder.svg";
@@ -53,9 +53,12 @@ const ContinueWatching = () => {
               
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="absolute bottom-0 p-2 w-full">
-                  <p className="text-white text-sm truncate">{item.title}</p>
+                  <p className="text-white text-sm truncate">{item.title || "Unknown Title"}</p>
                   {item.mediaType === "tv" && item.seasonNumber && item.episodeNumber && (
                     <p className="text-gray-300 text-xs">S{item.seasonNumber}:E{item.episodeNumber}</p>
+                  )}
+                  {item.serverId !== undefined && (
+                    <p className="text-gray-400 text-xs">Server {item.serverId + 1}</p>
                   )}
                 </div>
               </div>
@@ -76,6 +79,14 @@ const ContinueWatching = () => {
             >
               <X size={16} className="text-white" />
             </button>
+            
+            {/* Always show title below the thumbnail */}
+            <div className="mt-1 px-1">
+              <p className="text-white text-sm truncate">{item.title || "Unknown Title"}</p>
+              {item.mediaType === "tv" && item.seasonNumber && item.episodeNumber && (
+                <p className="text-gray-400 text-xs">S{item.seasonNumber}:E{item.episodeNumber}</p>
+              )}
+            </div>
           </div>
         ))}
       </div>

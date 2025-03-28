@@ -1,3 +1,4 @@
+
 import { Movie } from "@/types/types";
 
 // Types for our localStorage data
@@ -25,6 +26,7 @@ export interface ContinueWatchingItem {
   progress: number; // 0-100 percent watched
   seasonNumber?: number;
   episodeNumber?: number;
+  serverId?: number; // Added server ID
 }
 
 // Keys for localStorage
@@ -136,7 +138,8 @@ export const addToContinueWatching = (
   mediaType: string, 
   progress: number = 0, 
   seasonNumber?: number, 
-  episodeNumber?: number
+  episodeNumber?: number,
+  serverId?: number
 ): void => {
   const continueWatching = getContinueWatching();
   const title = movie.title || movie.name || 'Unknown';
@@ -154,7 +157,8 @@ export const addToContinueWatching = (
     lastWatchedAt: Date.now(),
     progress,
     seasonNumber,
-    episodeNumber
+    episodeNumber,
+    serverId
   };
   
   // Add to beginning of array
@@ -164,6 +168,18 @@ export const addToContinueWatching = (
   const limitedItems = updatedItems.slice(0, 15);
   
   saveContinueWatching(limitedItems);
+};
+
+export const updateContinueWatchingServer = (id: number, mediaType: string, serverId: number): void => {
+  const continueWatching = getContinueWatching();
+  const updatedItems = continueWatching.map(item => {
+    if (item.id === id && item.mediaType === mediaType) {
+      return { ...item, serverId };
+    }
+    return item;
+  });
+  
+  saveContinueWatching(updatedItems);
 };
 
 export const removeFromContinueWatching = (id: number, mediaType: string): void => {
