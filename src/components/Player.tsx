@@ -100,7 +100,6 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
             </SelectContent>
           </Select>
         </div>
-        <div className="max-md:hidden"/>
       </div>
 
       <div className="absolute inset-0 w-full h-full flex items-center justify-center">
