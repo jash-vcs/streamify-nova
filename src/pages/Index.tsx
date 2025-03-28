@@ -84,7 +84,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-netflix-black text-white">
+    <div className="min-h-screen bg-friends-black text-white">
       <Navbar />
       
       {!loading && featuredMovies.length > 0 && <Hero movies={featuredMovies} />}

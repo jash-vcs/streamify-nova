@@ -31,7 +31,7 @@ const ContinueWatching = () => {
   if (items.length === 0) return null;
 
   return (
-    <div className="px-4 md:px-8 mb-8">
+    <div className="px-4 md:px-8 mb-8 mt-8">
       <h2 className="text-xl md:text-2xl font-semibold mb-4 text-white">Continue Watching</h2>
       
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
@@ -64,12 +64,12 @@ const ContinueWatching = () => {
               </div>
               
               {/* Progress bar */}
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
+              {/* <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
                 <div 
                   className="h-full bg-red-600" 
                   style={{ width: `${item.progress}%` }}
                 />
-              </div>
+              </div> */}
             </div>
             
             <button
@@ -81,12 +81,12 @@ const ContinueWatching = () => {
             </button>
             
             {/* Always show title below the thumbnail */}
-            <div className="mt-1 px-1">
+            {/* <div className="mt-1 px-1">
               <p className="text-white text-sm truncate">{item.title || "Unknown Title"}</p>
               {item.mediaType === "tv" && item.seasonNumber && item.episodeNumber && (
                 <p className="text-gray-400 text-xs">S{item.seasonNumber}:E{item.episodeNumber}</p>
               )}
-            </div>
+            </div> */}
           </div>
         ))}
       </div>

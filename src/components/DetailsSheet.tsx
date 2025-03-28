@@ -138,11 +138,11 @@ const DetailsSheet = ({ mediaType, id, isOpen, onOpenChange }: DetailsSheetProps
               alt={details.title || details.name}
               className="w-full h-full object-cover object-top"
             />
-            <div className="absolute inset-0 netflix-gradient"></div>
+            <div className="absolute inset-0 friends-gradient"></div>
           </div>
           
           <div className="absolute bottom-0 left-0 p-6 w-full z-10">
-            <h1 className="netflix-title">
+            <h1 className="friends-title">
               {details.title || details.name}
             </h1>
             
@@ -174,13 +174,13 @@ const DetailsSheet = ({ mediaType, id, isOpen, onOpenChange }: DetailsSheetProps
             <div className="flex flex-wrap gap-2 mt-4">
               <button
                 onClick={handlePlay}
-                className="netflix-button-primary flex items-center space-x-2"
+                className="friends-button-primary flex items-center space-x-2"
               >
                 <Play size={16} />
                 <span>Play</span>
               </button>
               
-              <button className="netflix-button-secondary flex items-center space-x-2">
+              <button className="friends-button-secondary flex items-center space-x-2">
                 <Plus size={16} />
                 <span>My List</span>
               </button>
@@ -212,7 +212,7 @@ const DetailsSheet = ({ mediaType, id, isOpen, onOpenChange }: DetailsSheetProps
                 <h2 className="text-lg font-semibold">Episodes</h2>
                 <div className="relative">
                   <button 
-                    className="netflix-button-secondary flex items-center space-x-2 text-sm py-1"
+                    className="friends-button-secondary flex items-center space-x-2 text-sm py-1"
                     onClick={() => setSeasonsMenuOpen(!seasonsMenuOpen)}
                   >
                     <span>Season {selectedSeason}</span>
@@ -220,7 +220,7 @@ const DetailsSheet = ({ mediaType, id, isOpen, onOpenChange }: DetailsSheetProps
                   </button>
                   
                   {seasonsMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-netflix-black border border-gray-800 rounded-md shadow-xl z-20">
+                    <div className="absolute right-0 mt-2 w-48 bg-friends-black border border-gray-800 rounded-md shadow-xl z-20">
                       {seasons.map(season => (
                         <button
                           key={season.id}
@@ -259,7 +259,7 @@ const DetailsSheet = ({ mediaType, id, isOpen, onOpenChange }: DetailsSheetProps
                             className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity"
                           >
                             <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center">
-                              <Play size={16} className="text-netflix-black ml-1" />
+                              <Play size={16} className="text-friends-black ml-1" />
                             </div>
                           </button>
                         </div>
@@ -277,7 +277,7 @@ const DetailsSheet = ({ mediaType, id, isOpen, onOpenChange }: DetailsSheetProps
                             </div>
                             <button
                               onClick={() => handleEpisodePlay(selectedSeason, episode.episode_number)}
-                              className="netflix-button-primary text-xs px-3 py-1 hidden sm:block"
+                              className="friends-button-primary text-xs px-3 py-1 hidden sm:block"
                             >
                               Play
                             </button>
@@ -289,7 +289,7 @@ const DetailsSheet = ({ mediaType, id, isOpen, onOpenChange }: DetailsSheetProps
                   ))
                 ) : (
                   <div className="h-24 flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-netflix-red"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-friends-red"></div>
                   </div>
                 )}
               </div>
@@ -304,7 +304,7 @@ const DetailsSheet = ({ mediaType, id, isOpen, onOpenChange }: DetailsSheetProps
                 {details.similar.results.slice(0, 6).map(movie => (
                   <div
                     key={movie.id}
-                    className="netflix-card cursor-pointer"
+                    className="friends-card cursor-pointer"
                     onClick={() => handleSimilarItemClick(movie.id)}
                   >
                     <div className="aspect-[2/3] overflow-hidden rounded-md bg-gray-800">
@@ -339,7 +339,7 @@ const DetailsSheet = ({ mediaType, id, isOpen, onOpenChange }: DetailsSheetProps
   // Use Sheet for desktop and Drawer for mobile
   return isMobile ? (
     <Drawer open={isOpen} onOpenChange={onOpenChange}>
-      <DrawerContent className="max-h-[90vh] overflow-y-auto bg-netflix-black text-white">
+      <DrawerContent className="max-h-[90vh] overflow-y-auto bg-friends-black text-white">
         <DrawerHeader className="p-0">
           {renderContent()}
         </DrawerHeader>
@@ -349,7 +349,7 @@ const DetailsSheet = ({ mediaType, id, isOpen, onOpenChange }: DetailsSheetProps
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent 
         side="right" 
-        className="w-full sm:max-w-md md:max-w-lg lg:max-w-2xl p-0 overflow-y-auto bg-netflix-black text-white"
+        className="w-full sm:max-w-md md:max-w-lg lg:max-w-2xl p-0 overflow-y-auto bg-friends-black text-white"
       >
         {renderContent()}
       </SheetContent>

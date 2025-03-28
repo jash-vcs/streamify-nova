@@ -56,13 +56,13 @@ const TvShows = () => {
 
   // Get only TV related categories
   const tvCategories = categories.filter(category => 
-    category.id === "netflix-originals" || 
+    category.id === "friends-originals" || 
     category.id === "tv-shows" || 
     category.path.includes("/tv")
   );
 
   return (
-    <div className="min-h-screen bg-netflix-black text-white">
+    <div className="min-h-screen bg-friends-black text-white">
       <Navbar />
       
       {!loading && featuredTvShows.length > 0 && <Hero movies={featuredTvShows} />}

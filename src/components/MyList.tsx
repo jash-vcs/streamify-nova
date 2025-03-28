@@ -21,7 +21,7 @@ const MyList = () => {
   };
 
   const handleItemClick = (item: WatchlistItem) => {
-    navigate(`/details/${item.mediaType}/${item.id}`);
+    navigate(`/details/${item.mediaType || "movie"}/${item.id}`);
   };
 
   if (items.length === 0) return null;

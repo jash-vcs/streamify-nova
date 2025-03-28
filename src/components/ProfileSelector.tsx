@@ -38,7 +38,7 @@ const ProfileSelector = ({ onProfileSelected }: { onProfileSelected: () => void 
   };
 
   return (
-    <div className="min-h-screen bg-netflix-black text-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-friends-black text-white flex flex-col items-center justify-center p-4">
       <h1 className="text-4xl font-bold mb-12">Who's watching?</h1>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-12">

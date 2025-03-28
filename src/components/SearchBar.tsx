@@ -27,7 +27,7 @@ const SearchBar = ({ onClose }: SearchBarProps) => {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="bg-netflix-black/90 border border-gray-700 text-white pl-10 pr-10 py-1 rounded-md focus:outline-none focus:ring-1 focus:ring-netflix-red md:w-64"
+          className="bg-friends-black/90 border border-gray-700 text-white pl-10 pr-10 py-1 rounded-md focus:outline-none focus:ring-1 focus:ring-friends-red md:w-64"
           placeholder="Titles, people, genres"
           autoFocus
         />

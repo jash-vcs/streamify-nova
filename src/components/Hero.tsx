@@ -164,8 +164,8 @@ const Hero = ({ movies }: HeroProps) => {
                     loading="eager"
                   />
                 )}
-                <div className="absolute inset-0 netflix-gradient"></div>
-                <div className="absolute top-0 h-24 w-full netflix-gradient-top"></div>
+                <div className="absolute inset-0 friends-gradient"></div>
+                <div className="absolute top-0 h-24 w-full friends-gradient-top"></div>
               </div>
 
               {banner.id === movie.id && (
@@ -175,11 +175,11 @@ const Hero = ({ movies }: HeroProps) => {
                   </h1>
 
                   <div className="flex space-x-4 animate-slide-up" style={{ animationDelay: "0.1s" }}>
-                    <button onClick={handlePlay} className="netflix-button-primary flex items-center space-x-2 px-8">
+                    <button onClick={handlePlay} className="friends-button-primary flex items-center space-x-2 px-8">
                       <Play size={18} />
                       <span>Play</span>
                     </button>
-                    <button onClick={handleMoreInfo} className="netflix-button-secondary flex items-center space-x-2">
+                    <button onClick={handleMoreInfo} className="friends-button-secondary flex items-center space-x-2">
                       <Info size={18} />
                       <span>More Info</span>
                     </button>

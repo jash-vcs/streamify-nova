@@ -20,7 +20,7 @@ const MyListPage = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-netflix-black text-white">
+    <div className="min-h-screen bg-friends-black text-white">
       <Navbar />
       <div className="pt-24 pb-20">
         <h1 className="text-3xl font-bold px-4 md:px-8 mb-6">

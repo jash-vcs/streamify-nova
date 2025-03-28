@@ -25,7 +25,7 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
-				netflix: {
+				friends: {
 					red: '#E50914',
 					black: '#141414',
 					dark: '#000000',

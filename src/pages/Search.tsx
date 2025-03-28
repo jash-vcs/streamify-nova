@@ -40,7 +40,7 @@ const Search = () => {
   }, [query]);
 
   return (
-    <div className="min-h-screen bg-netflix-black text-white">
+    <div className="min-h-screen bg-friends-black text-white">
       <Navbar />
       
       <div className="pt-24 pb-16 px-6 md:px-16">

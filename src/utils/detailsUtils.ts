@@ -17,6 +17,12 @@ export const toggleWatchlist = (movie: MovieDetails, mediaType: string): boolean
   }
 };
 
+export const isMovieInWatchlist = (movie: MovieDetails, mediaType: string)=>{
+  const isInList = isInWatchlist(movie.id, mediaType);
+  return isInList;
+}
+
+
 export const formatRuntime = (minutes?: number): string => {
   if (!minutes) return "N/A";
   

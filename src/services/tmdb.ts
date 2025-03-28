@@ -1,13 +1,13 @@
 
 import { Episode, MovieDetails, MovieResponse, Season } from "@/types/types";
 
-const API_KEY = "12eb05fc4d174f5a9eb084c97e81d0a6"; // Free TMDB API key for demo purposes
+export const API_KEY = import.meta.env.VITE_TMDB_API_KEY; // Free TMDB API key for demo purposes
 const BASE_URL = "https://api.themoviedb.org/3";
 const LANGUAGE = "en-US";
 
 const requests = {
   fetchTrending: `${BASE_URL}/trending/all/week?api_key=${API_KEY}&language=${LANGUAGE}`,
-  fetchNetflixOriginals: `${BASE_URL}/discover/tv?api_key=${API_KEY}&with_networks=213&language=${LANGUAGE}`,
+  fetchFriendsOriginals: `${BASE_URL}/discover/tv?api_key=${API_KEY}&with_networks=213&language=${LANGUAGE}`,
   fetchTopRated: `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=${LANGUAGE}`,
   fetchActionMovies: `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=28&language=${LANGUAGE}`,
   fetchComedyMovies: `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=35&language=${LANGUAGE}`,
@@ -20,9 +20,9 @@ const requests = {
 
 export const categories = [
   {
-    id: "netflix-originals",
-    title: "Netflix Originals",
-    path: requests.fetchNetflixOriginals,
+    id: "friends-originals",
+    title: "Friends Originals",
+    path: requests.fetchFriendsOriginals,
     isLarge: true,
   },
   {

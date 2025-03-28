@@ -51,7 +51,7 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
   if (loading) {
     return (
       <div className="row-container space-y-4 my-6 md:my-8">
-        <h2 className="netflix-section-title pl-6">{title}</h2>
+        <h2 className="friends-section-title pl-6">{title}</h2>
         <div className="flex space-x-4 pl-6 overflow-x-hidden hide-scrollbar">
           {[...Array(8)].map((_, i) => (
             <div 
@@ -72,7 +72,7 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
 
   return (
     <div className="row-container space-y-2 my-6 md:my-8 group">
-      <h2 className="netflix-section-title pl-6 opacity-90 group-hover:opacity-100 transition-opacity">{title}</h2>
+      <h2 className="friends-section-title pl-6 opacity-90 group-hover:opacity-100 transition-opacity">{title}</h2>
       
       <Carousel
         opts={{
@@ -81,7 +81,7 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
           skipSnaps: false,
           containScroll: "trimSnaps",
         }}
-        className="w-full max-md:px-8"
+        className="w-full px-8 max-md:px-8"
       >
         <CarouselContent className="pl-6">
           {movies.map((movie) => (
@@ -103,8 +103,8 @@ const MovieRow = ({ title, path, isLarge = false }: MovieRowProps) => {
         
         {!isMobile && (
           <>
-            <CarouselPrevious className="hidden md:flex left-1 h-20 w-10 rounded-r-md bg-black/30 hover:bg-black/50" />
-            <CarouselNext className="hidden md:flex right-1 h-20 w-10 rounded-l-md bg-black/30 hover:bg-black/50" />
+            <CarouselPrevious className="hidden md:flex left-1 h-20 w-10 bg-transparent border-none rounded-r-md hover:bg-black/50" />
+            <CarouselNext className="hidden md:flex right-1 h-20 w-10 bg-transparent border-none rounded-l-md hover:bg-black/50" />
           </>
         )}
       </Carousel>

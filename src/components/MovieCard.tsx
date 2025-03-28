@@ -41,7 +41,7 @@ const MovieCard = ({ movie, isLarge = false }: MovieCardProps) => {
 
   return (
     <div
-      className={`netflix-card group cursor-pointer ${isLarge ? "w-full aspect-[2/3]" : "w-full aspect-video"}`}
+      className={`friends-card group cursor-pointer ${isLarge ? "w-full aspect-[2/3]" : "w-full aspect-video"}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleCardClick}
@@ -68,7 +68,7 @@ const MovieCard = ({ movie, isLarge = false }: MovieCardProps) => {
                   className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-white/90 transition-colors"
                   aria-label="Play"
                 >
-                  <Play size={16} className="text-netflix-black ml-0.5" />
+                  <Play size={16} className="text-friends-black ml-0.5" />
                 </button>
                 <button 
                   onClick={handleInfoClick}
@@ -89,7 +89,7 @@ const MovieCard = ({ movie, isLarge = false }: MovieCardProps) => {
             
             <div className="flex items-center space-x-2 text-xs text-gray-300">
               <span>{(movie.release_date || movie.first_air_date || "").substring(0, 4) || "N/A"}</span>
-              {mediaType === "tv" && <span className="px-1 py-0.5 bg-netflix-red/90 rounded text-white">Series</span>}
+              {mediaType === "tv" && <span className="px-1 py-0.5 bg-friends-red/90 rounded text-white">Series</span>}
               {mediaType === "movie" && <span className="flex items-center"><Clock size={12} className="mr-1" />90m</span>}
             </div>
           </div>

@@ -49,25 +49,25 @@ const Navbar = () => {
   const goToProfiles = () => {
     navigate("/");
     // Force profile selection screen
-    localStorage.removeItem("netflix-clone-active-profile");
+    localStorage.removeItem("friends-clone-active-profile");
     window.location.reload();
   };
 
   return (
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-500 px-4 md:px-8 py-4 ${
-        isScrolled ? "nav-background-scroll" : "bg-gradient-to-b from-netflix-black/80 to-transparent"
+        isScrolled ? "nav-background-scroll" : "bg-gradient-to-b from-friends-black/80 to-transparent"
       }`}
     >
       <div className="flex items-center justify-between">
         <div className={cn("flex items-center space-x-6", isMobile && showSearch ? "hidden" : "")}>
           <Link to="/" className="flex items-center">
-            <p className="font-black text-red-500 text-lg">NETFLIX</p>
+            <p className="font-black text-red-500 text-2xl">FRIENDS</p>
           </Link>
           <div className="flex space-x-4">
-            <Link to="/tv-shows" className="text-sm text-white hover:text-gray-300 transition">TV Shows</Link>
-            <Link to="/movies" className="text-sm text-white hover:text-gray-300 transition">Movies</Link>
-            <Link to="/my-list" className="text-sm text-white hover:text-gray-300 transition">My List</Link>
+            <Link to="/tv-shows" className="text-lg text-white hover:text-gray-300 transition">TV Shows</Link>
+            <Link to="/movies" className="text-lg text-white hover:text-gray-300 transition">Movies</Link>
+            <Link to="/my-list" className="text-lg text-white hover:text-gray-300 transition">My List</Link>
           </div>
         </div>
 
@@ -85,12 +85,12 @@ const Navbar = () => {
               <Search size={20} />
             </button>
           )}
-          <button
+          {/* <button
             className="text-white hover:text-gray-300 transition hidden md:block"
             aria-label="Notifications"
           >
             <Bell size={20} />
-          </button>
+          </button> */}
           
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center space-x-2 cursor-pointer outline-none">
@@ -99,7 +99,7 @@ const Navbar = () => {
               </div>
               <ChevronDown size={16} className="text-white" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-netflix-black border-gray-700 text-white min-w-[200px]">
+            <DropdownMenuContent className="bg-friends-black border-gray-700 text-white min-w-[200px]">
               {profiles.map(profile => (
                 <DropdownMenuItem 
                   key={profile.id}

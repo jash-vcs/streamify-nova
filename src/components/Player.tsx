@@ -17,6 +17,7 @@ import {
   getLastWatched, 
   updateContinueWatchingServer 
 } from "@/utils/localStorageUtils";
+import { API_KEY } from "@/services/tmdb";
 
 interface PlayerProps {
   mediaType: string;
@@ -112,7 +113,7 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
     const fetchMovieDetails = async () => {
       try {
         const res = await fetch(
-          `https://api.themoviedb.org/3/${mediaType}/${id}?api_key=2a5ea3b326cfeb693a6227de27c9439d&language=en-US`
+          `https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${API_KEY}&language=en-US`
         );
         const movie = await res.json();
         
@@ -155,7 +156,7 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
 
   return (
     <div 
-      className="relative w-full h-screen bg-netflix-black"
+      className="relative w-full h-screen bg-friends-black"
       onMouseMove={handleMouseMove}
       onTouchStart={handleMouseMove}
     >

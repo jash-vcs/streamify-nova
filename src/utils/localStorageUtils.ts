@@ -30,10 +30,10 @@ export interface ContinueWatchingItem {
 }
 
 // Keys for localStorage
-const PROFILES_KEY = 'netflix-clone-profiles';
-const WATCHLIST_KEY = 'netflix-clone-watchlist';
-const CONTINUE_WATCHING_KEY = 'netflix-clone-continue-watching';
-const ACTIVE_PROFILE_KEY = 'netflix-clone-active-profile';
+const PROFILES_KEY = 'friends-clone-profiles';
+const WATCHLIST_KEY = 'friends-clone-watchlist';
+const CONTINUE_WATCHING_KEY = 'friends-clone-continue-watching';
+const ACTIVE_PROFILE_KEY = 'friends-clone-active-profile';
 
 // User Profiles
 export const getProfiles = (): UserProfile[] => {
