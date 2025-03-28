@@ -1,5 +1,6 @@
-import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+
+import { ArrowLeft, ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { servers } from "@/utils/serverUtils";
 import {
@@ -9,6 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { 
+  addToContinueWatching, 
+  getLastWatched, 
+  updateContinueWatchingServer 
+} from "@/utils/localStorageUtils";
 
 interface PlayerProps {
   mediaType: string;
@@ -19,10 +27,22 @@ interface PlayerProps {
 
 const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => {
   const navigate = useNavigate();
+  const params = useParams();
   const [selectedServer, setSelectedServer] = useState(0);
   const [showControls, setShowControls] = useState(true);
   const [controlsTimer, setControlsTimer] = useState<NodeJS.Timeout | null>(null);
   
+  // Convert params to numbers
+  const currentSeason = seasonNumber ? parseInt(seasonNumber) : 1;
+  const currentEpisode = episodeNumber ? parseInt(episodeNumber) : 1;
+
+  useEffect(() => {
+    // Check if this media is in continue watching and load the last used server
+    const lastWatched = getLastWatched(parseInt(id), mediaType);
+    if (lastWatched && lastWatched.serverId !== undefined) {
+      setSelectedServer(lastWatched.serverId);
+    }
+  }, [id, mediaType]);
 
   // Get the embed URL from the selected server
   const getEmbedUrl = () => {
@@ -43,6 +63,75 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
     
     setControlsTimer(timer);
   };
+
+  // Handle server change
+  const handleServerChange = (value: string) => {
+    const serverId = parseInt(value);
+    setSelectedServer(serverId);
+    
+    // Update in continue watching
+    updateContinueWatchingServer(parseInt(id), mediaType, serverId);
+    toast.success(`Switched to ${servers[serverId].name}`);
+  };
+
+  // Handle navigation to previous episode
+  const handlePreviousEpisode = () => {
+    if (mediaType !== 'tv') return;
+    
+    if (currentEpisode > 1) {
+      // Go to previous episode in same season
+      navigate(`/watch/${mediaType}/${id}/${currentSeason}/${currentEpisode - 1}`);
+      toast.success(`Playing S${currentSeason}:E${currentEpisode - 1}`);
+    } else if (currentSeason > 1) {
+      // Go to last episode of previous season (assuming 10 episodes per season)
+      navigate(`/watch/${mediaType}/${id}/${currentSeason - 1}/10`);
+      toast.success(`Playing S${currentSeason - 1}:E10`);
+    } else {
+      toast.info("This is the first episode");
+    }
+  };
+
+  // Handle navigation to next episode
+  const handleNextEpisode = () => {
+    if (mediaType !== 'tv') return;
+    
+    // Go to next episode (assuming 10 episodes per season)
+    if (currentEpisode < 10) {
+      navigate(`/watch/${mediaType}/${id}/${currentSeason}/${currentEpisode + 1}`);
+      toast.success(`Playing S${currentSeason}:E${currentEpisode + 1}`);
+    } else {
+      // Go to first episode of next season
+      navigate(`/watch/${mediaType}/${id}/${currentSeason + 1}/1`);
+      toast.success(`Playing S${currentSeason + 1}:E1`);
+    }
+  };
+
+  // Track viewing in continue watching list
+  useEffect(() => {
+    // Fetch movie details from API to get title and poster
+    const fetchMovieDetails = async () => {
+      try {
+        const res = await fetch(
+          `https://api.themoviedb.org/3/${mediaType}/${id}?api_key=2a5ea3b326cfeb693a6227de27c9439d&language=en-US`
+        );
+        const movie = await res.json();
+        
+        // Add to continue watching with 0 progress initially
+        addToContinueWatching(
+          movie,
+          mediaType,
+          0,
+          mediaType === 'tv' ? currentSeason : undefined,
+          mediaType === 'tv' ? currentEpisode : undefined,
+          selectedServer
+        );
+      } catch (error) {
+        console.error("Failed to add to continue watching:", error);
+      }
+    };
+    
+    fetchMovieDetails();
+  }, [id, mediaType, seasonNumber, episodeNumber, selectedServer]);
 
   // Set up orientation and controls
   useEffect(() => {
@@ -82,7 +171,7 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
         <div className="w-48">
           <Select
             value={selectedServer.toString()}
-            onValueChange={(value) => setSelectedServer(parseInt(value))}
+            onValueChange={handleServerChange}
           >
             <SelectTrigger className="bg-black/40 text-white border-none hover:bg-black/60">
               <SelectValue placeholder={servers[selectedServer].name} />
@@ -111,6 +200,30 @@ const Player = ({ mediaType, id, seasonNumber, episodeNumber }: PlayerProps) => 
           title="Video Player"
         ></iframe>
       </div>
+
+      {/* Episode Navigation Controls */}
+      {mediaType === 'tv' && (
+        <div className={`absolute bottom-6 left-0 right-0 flex justify-center gap-4 z-10 transition-opacity duration-300 ${showControls ? 'opacity-100' : 'opacity-0'}`}>
+          <Button
+            variant="outline"
+            size="lg"
+            className="bg-black/40 text-white border-none hover:bg-black/60"
+            onClick={handlePreviousEpisode}
+          >
+            <ArrowLeftCircle className="mr-2" />
+            Previous Episode
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            className="bg-black/40 text-white border-none hover:bg-black/60"
+            onClick={handleNextEpisode}
+          >
+            Next Episode
+            <ArrowRightCircle className="ml-2" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

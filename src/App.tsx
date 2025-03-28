@@ -12,6 +12,7 @@ import Details from "./pages/Details";
 import Watch from "./pages/Watch";
 import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
+import MyListPage from "./pages/MyListPage";
 
 const App = () => {
   // Create a client instance inside the component
@@ -34,8 +35,7 @@ const App = () => {
               <Route path="/tv-shows/details/:mediaType/:id" element={<Details />} />
               <Route path="/movies" element={<Movies />} />
               <Route path="/movies/details/:mediaType/:id" element={<Details />} />
-              <Route path="/latest" element={<Index />} />
-              <Route path="/my-list" element={<Index />} />
+              <Route path="/my-list" element={<MyListPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
